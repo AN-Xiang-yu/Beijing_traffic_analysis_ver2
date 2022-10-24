@@ -45,7 +45,7 @@ def searchPoint(long, lat, file, Pointtype):
 
                 # Calculate the distance between M and the input point
                 tempoDistance = ((long-float(longM))*5000)**3 + \
-                    ((lat-float(latM))*5000)**2
+                    ((lat-float(latM))*5000)**3
                 if tempoDistance < distance:
                     # tempoDistance is smaller than dis, then update distance, and update idPoint.
                     distance = tempoDistance
