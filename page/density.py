@@ -8,7 +8,7 @@ from math import ceil
 
 # contant variable
 # number of taxis in the sample data at Beijing at 2008
-NUMBER_TAXI_SAMPLE = 10134
+NUMBER_TAXI_SAMPLE = 1000
 # total number of taxis in the data at Beijing at 2008
 NUMBER_TAXI_TOTAL = 66000
 # total number of cars in the data at Beijing at 2008
