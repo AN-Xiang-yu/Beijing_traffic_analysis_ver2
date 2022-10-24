@@ -236,12 +236,10 @@ def main():
 
     with dataset:
         path = "csv/taxi_data.csv"
-        with open(path, 'r') as f:
-            # data = charge_data(path)
-            None
+        data = charge_data(path)
 
-    # with density_hour:
-    #     display_density_hour(data)
+    with density_hour:
+        display_density_hour(data)
 
-    # with density_weekday:
-    #     display_density_weekday(data)
+    with density_weekday:
+        display_density_weekday(data)
