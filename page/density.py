@@ -108,7 +108,7 @@ def density_car_period_hour(time_start_selected, time_end_selected, data):
     # density of the taxis of a selected time in Beijing
     density_taxi = density_taxi_period_hour(
         time_start_selected, time_end_selected,
-        data)
+        data) * RATIO_CAR_TAXI
     # density of the taxis of a selected time in Beijing
     density_car = density_taxi * RATIO_CAR_TAXI * RATIO_TAXI_TOTAL_SAMPLE
     return ceil(density_taxi), ceil(density_car)
@@ -184,7 +184,7 @@ def density_car_period_weekday(weekday_selected, data):
     # he density of the cars of a selected day in Beijing
     density_taxi = density_taxi_period_weekday(
         weekday_selected,
-        data)
+        data) * RATIO_CAR_TAXI
     density_car = density_taxi * RATIO_CAR_TAXI * RATIO_TAXI_TOTAL_SAMPLE
     return ceil(density_taxi), ceil(density_car)
 
@@ -235,7 +235,7 @@ def main():
     density_weekday = st.container()
 
     with dataset:
-        path = "csv/taxi_data.csv"
+        path = "csv/taxi_data_reduced.csv"
         data = charge_data(path)
 
     with density_hour:
