@@ -1,0 +1,34 @@
+In year 2008
+Paris :
+	population : 2,181 millions
+	taxis : 18 500 taxis (2020)
+		15 000 (2008)
+	cars : 2,6 millions
+	cars per household : 0,37 (2015) 
+			     0,47 (2006)
+
+Sources :
+https://www.paris.fr/pages/bilan-des-deplacements-a-paris-en-2020-8121
+https://www.apur.org/fr/nos-travaux/evolution-2012-2021-parc-automobile-tendances-renouvellement-parc-immatricule-grand-paris
+https://www.apur.org/sites/default/files/documents/APBROAPU535.pdf
+https://www.apur.org/en/geo-data/evolution-ownership-between-1999-and-2015
+https://www.leparisien.fr/economie/paris-manque-de-chauffeurs-de-taxi-31-07-2008-110453.php
+
+In year 2008
+New York :
+	population : 8 214 426 (2006)
+	population having a car : 23% (2010)
+	deduced number of cars : 1 889 317.98
+	taxis : 13 605 (2014)
+
+Sources :
+https://nyc.streetsblog.org/2011/04/06/new-yorks-car-ownership-rate-is-on-the-rise/
+https://en.wikipedia.org/wiki/Taxis_of_New_York_City
+https://www1.nyc.gov/html/dot/downloads/pdf/nyc_greendividend_april2010.pdf
+
+Beijing :
+
+Sources :
+https://www.researchgate.net/figure/Vehicle-population-and-its-growth-rate-in-Beijing-from-2001-to-2010-Source-Beijing_fig1_284094252
+
+email prof à ajouter au gitub : khodor.hammoud@intervenants.efrei.net
