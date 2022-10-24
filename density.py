@@ -32,10 +32,10 @@ def charge_data(path):
     """
     # charge the data
     data = pd.read_csv(path)
-    # # change the type of column time into datetime
-    # data['time'] = pd.to_datetime(data['time'], format='%Y/%m/%d %H:%M:%S')
-    # # take the column time as the index
-    # data = data.set_index('time')
+    # change the type of column time into datetime
+    data['time'] = pd.to_datetime(data['time'], format='%Y/%m/%d %H:%M:%S')
+    # take the column time as the index
+    data = data.set_index('time')
     return data
 
 
@@ -235,8 +235,8 @@ def main():
     density_weekday = st.container()
 
     with dataset:
-        path = "csv/path.csv"
-        with open("taxi.csv", 'r') as f:
+        path = "csv/taxi_data.csv"
+        with open(path, 'r') as f:
             # data = charge_data(path)
             None
 
