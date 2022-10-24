@@ -32,10 +32,10 @@ def charge_data(path):
     """
     # charge the data
     data = pd.read_csv(path)
-    # change the type of column time into datetime
-    data['time'] = pd.to_datetime(data['time'], format='%Y/%m/%d %H:%M:%S')
-    # take the column time as the index
-    data = data.set_index('time')
+    # # change the type of column time into datetime
+    # data['time'] = pd.to_datetime(data['time'], format='%Y/%m/%d %H:%M:%S')
+    # # take the column time as the index
+    # data = data.set_index('time')
     return data
 
 
@@ -234,9 +234,11 @@ def main():
     density_hour = st.container()
     density_weekday = st.container()
 
-    # with dataset:
-    #     path = "https://media.githubusercontent.com/media/AN-Xiang-yu/Beijing_traffic_analysis_ver2/main/csv/taxi_data.csv?token=AO23ECKDKJGEQIFDOXFJHIDDKZNAQ"
-    #     data = charge_data(path)
+    with dataset:
+        path = "csv/path.csv"
+        with open("taxi.csv", 'r') as f:
+            # data = charge_data(path)
+            None
 
     # with density_hour:
     #     display_density_hour(data)
