@@ -236,10 +236,10 @@ def main():
 
     with dataset:
         path = "https://media.githubusercontent.com/media/AN-Xiang-yu/Beijing_traffic_analysis_ver2/main/csv/taxi_data.csv?token=AO23ECKDKJGEQIFDOXFJHIDDKZNAQ"
-    #     data = charge_data(path)
+        data = charge_data(path)
 
-    # with density_hour:
-    #     display_density_hour(data)
+    with density_hour:
+        display_density_hour(data)
 
-    # with density_weekday:
-    #     display_density_weekday(data)
+    with density_weekday:
+        display_density_weekday(data)
