@@ -1,6 +1,7 @@
 # app.py
 
-from page import best_route, congestion, density
+from page import best_route, congestion, density, tools as t
+
 import streamlit as st
 
 # declaration of constants
@@ -21,11 +22,29 @@ footer = st.container()
 with sidebar:
     st.markdown(
         "<h2 style='text-align: center;'>Beijing trafic research</h2>", unsafe_allow_html=True)  # title of the sidebar
-    st.text('Team 6')
-    st.text('Xiangyu AN')
-    st.text('Mélisande GREGOIRE--BEGRANGER')
-    st.text('Sugitha NADARAJAH')
-    st.text('M1 DAI')
+    st.title('Our LinkedIn')
+
+    linkX = 'LinkedIn  Xiangyu [link](https://www.linkedin.com/in/xiangyu-an-34109a196/)'
+    st.markdown(linkX, unsafe_allow_html=True)
+
+    linkM = 'LinkedIn Mélisande [link](https://www.linkedin.com/in/mélisande-grégoire-bégranger-a5654219b/)'
+    st.markdown(linkM, unsafe_allow_html=True)
+
+    linkS = 'LinkedIn Sugitha [link](https://www.linkedin.com/in/sugitha-nadarajah-07681119b/)'
+    st.markdown(linkS, unsafe_allow_html=True)
+
+    linkM = 'LinkedIn Mélisande [link](https://www.linkedin.com/in/mélisande-grégoire-bégranger-a5654219b/)'
+    st.markdown(linkM, unsafe_allow_html=True)
+
+    st.title('Our LinkedIn')
+    gitxiangyu = 'Git  Xiangyu [link](https://github.com/AN-Xiang-yu)'
+    st.markdown(gitxiangyu, unsafe_allow_html=True)
+
+    gitmelisande = 'Git  Mélisande [link](https://github.com/melisandeGB)'
+    st.markdown(gitxiangyu, unsafe_allow_html=True)
+
+    gitsugitha = 'Git Sugitha [link](https://github.com/Sugitha-Nadarajah)'
+    st.markdown(gitsugitha, unsafe_allow_html=True)
     selection = st.radio("Browsing", list(
         PAGES.keys()))  # navigation to the other page
 

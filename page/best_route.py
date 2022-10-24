@@ -1,6 +1,5 @@
 # best_route.py
 
-import re
 import streamlit as st
 import csv
 import math
@@ -98,7 +97,7 @@ def datetimeInput():
     with col1:
         date = st.date_input(
             "Please enter the date",
-            datetime.date(2020, 6, 6))
+            datetime.date(2022, 10, 24))
     with col2:
         time = st.time_input('Please enter the time', datetime.time(0, 0))
 
@@ -118,7 +117,6 @@ def getFileLoc(weekday, hour):
     Returns:
         str: the location of the file to be used
     """
-    #
     if weekday < 6:
         hourStart = str(hour)
         if len(hourStart) == 1:
