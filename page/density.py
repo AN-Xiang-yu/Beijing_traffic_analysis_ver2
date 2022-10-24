@@ -235,7 +235,7 @@ def main():
     density_weekday = st.container()
 
     with dataset:
-        path = "https://media.githubusercontent.com/media/AN-Xiang-yu/Beijing_traffic_analysis_ver2/main/csv/taxi_data.csv?token=AO23ECKDKJGEQIFDOXFJHIDDKZNAQ"
+        path = "csv/taxi_data.csv"
         data = charge_data(path)
 
     with density_hour:
