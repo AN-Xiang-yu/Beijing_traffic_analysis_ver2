@@ -288,7 +288,7 @@ def Dijkstra(graph, fromNode):
     return parent
 
 
-def getPointPassed(toNode, parent_dij):
+def getPointPassed(toNode, parent_dij, file):
     """get all the point passed
 
     Args:
@@ -304,19 +304,20 @@ def getPointPassed(toNode, parent_dij):
     try:
         while parent_dij[toNode] is not None:
             fromNode = parent_dij[toNode]
-            f = open('csv/mMap.csv')
-            for row in csv.reader(f, delimiter=','):
-                if row[0] == "LinkID":
-                    continue
-                if str(row[1]) == str(fromNode) and str(row[2]) == str(toNode):
-                    count += 1
-                    geo = str(row[5]).split(';')
-                    geo.reverse()
-                    for i in geo:
-                        lonTmp = float(str(i).split(':')[0])
-                        latTmp = float(str(i).split(':')[1])
-                        ployList.append([latTmp, lonTmp])
-            toNode = fromNode
+
+            with open(file, 'r') as f:
+                next(f)
+                for row in csv.reader(f, delimiter=','):
+                    if str(row[1]) == str(fromNode) and str(row[2]) == str(toNode):
+                        count += 1
+                        numberPoints = row[6]
+                        geo = str(row[5]).split(';')
+                        geo.reverse()
+                        for i in geo:
+                            lonTmp = float(str(i).split(':')[0])
+                            latTmp = float(str(i).split(':')[1])
+                            ployList.append([latTmp, lonTmp, numberPoints])
+                toNode = fromNode
     except TypeError:
         st.write('No cluster found')
 
@@ -376,6 +377,23 @@ def calcul_total_distance(ployList):
     return distance_cumul
 
 
+def congestion_color(number_car):
+    """determine congestion based on the number of vehicles
+
+    Args:
+        number_car (int): number of vehicles
+
+    Returns:
+        str: color of the line on the map
+    """
+    if number_car < 10:
+        return 'green'
+    elif number_car < 20:
+        return 'yellow'
+    else:
+        return 'red'
+
+
 def calcul_price_taxi(taxi_distance):
     """Calculate the cost of a cab ride
 
@@ -395,39 +413,52 @@ def calcul_price_taxi(taxi_distance):
         return BASE_PRICE + PRICE_PER_KILOMETER * math.ceil(taxi_distance-BASE_KILOMETER)
 
 
-def showPath(ployList, latFromT, lonFromT, latToT, lonToT):
+def showPath(ployList, latFromT, longFromT, latToT, longToT):
     """show the path passed
 
     Args:
         ployList (list): the list where we can find all the point passed
-        latFromT (float): the 
-        lonFromT (float): _description_
-        latToT (float): _description_
-        lonToT (float): _description_
+        latFromT (float): the latitude of the point to start
+        longFromT (float): the longtitude of the point to start
+        latToT (float): the latitude of the point to end
+        longToT (float): the longtitude of the point to end
     """
+    # initialize the map
     mmap = folium.Map(location=[39.9632245, 116.280983], zoom_start=11,
-                      tiles='http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
+                      tiles='http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunityENG/MapServer/tile/{z}/{y}/{x}',
                       attr='default', key='result')
-    start_line = [[latFromT, lonFromT], ployList[len(ployList)-1]]
-    end_line = [[latToT, lonToT], ployList[0]]
+    # initialize the start and end walking lines
+    start_line = [[latFromT, longFromT], [
+        ployList[len(ployList)-1][0], ployList[len(ployList)-1][1]]]
+    end_line = [[latToT, longToT], [ployList[0][0], ployList[0][1]]]
+    # the distance and time of taxi
     distance_taxi = round(calcul_total_distance(ployList), 3)
     average_time_taxi = round((distance_taxi/23)*60, 1)
+    # the distance and time of walking
     distance_start_walk = round(calcul_total_distance(start_line), 3)
     average_time_taxi_start_walk = round((distance_start_walk/7.5)*60, 1)
     distance_end_walk = round(calcul_total_distance(end_line), 3)
     average_time_taxi_end_walk = round((distance_end_walk/7.5)*60, 1)
-    folium.PolyLine(start_line, color='red',
+    # print the walking line
+    folium.PolyLine(start_line, color='blue',
                     tooltip='walking path ' + str(distance_start_walk) + ' km for ' + str(average_time_taxi_start_walk)+' min').add_to(mmap)
-    folium.PolyLine(end_line, color='red',
+    folium.PolyLine(end_line, color='blue',
                     tooltip='walking path ' + str(distance_end_walk) + ' km for ' + str(average_time_taxi_end_walk)+' min').add_to(mmap)
-    folium.PolyLine(ployList, color='green',
-                    tooltip='taxi path ' + str(distance_taxi) + ' km for ' + str(average_time_taxi)+' min').add_to(mmap)
-    folium.Marker([latFromT, lonFromT],  tooltip='Start point',
+    # print the taxi line
+    for index_point in range(0, len(ployList)-2):
+        point_start = ployList[index_point]
+        point_end = ployList[index_point+1]
+        number_car = int(point_start[2]) + int(point_end[2])
+        line = [[float(point_start[0]), float(point_start[1])]] + \
+            [[float(point_end[0]), float(point_end[1])]]
+        folium.PolyLine(line, color=congestion_color(number_car)).add_to(mmap)
+    # mark the start and end point
+    folium.Marker([latFromT, longFromT],  tooltip='Start point',
                   icon=folium.Icon(color='blue')).add_to(mmap)
-    folium.Marker([latToT, lonToT], tooltip='End point',
+    folium.Marker([latToT, longToT], tooltip='End point',
                   icon=folium.Icon(color='red')).add_to(mmap)
     mmap.add_child(folium.LatLngPopup())
-    # Show trip details
+    # show trip details
     price_taxi = calcul_price_taxi(distance_taxi)
     st.write('For this trip you can expect to pay '+str(price_taxi)+" ¥")
     st.write('For this trip, you will need to walk for ' + str(distance_start_walk) +
@@ -444,21 +475,21 @@ def showPath(ployList, latFromT, lonFromT, latToT, lonToT):
 def main():
     """the main part of the page
     """
-    # initialise lonFromT
-    lonFromT = 0
+    # initialise longFromT
+    longFromT = 0
     # input of the datetime
     week, hour = datetimeInput()
     # get the path of the map file
-    fileLoc = getFileLoc(week, hour)
+    file = getFileLoc(week, hour)
     # input of the start and end point
-    lonFromT, latFromT, lonToT, latToT, fromNode, toNode = startEndPointInput(
-        fileLoc)
+    longFromT, latFromT, longToT, latToT, fromNode, toNode = startEndPointInput(
+        file)
     # initialize graph
-    graph = initGraph(fileLoc)
+    graph = initGraph(file)
 
-    if lonFromT != 0:
+    if longFromT != 0:
         parent = Dijkstra(graph, fromNode)
         # get all the points passed
-        ployList = getPointPassed(toNode, parent)
+        ployList = getPointPassed(toNode, parent, file)
         # show the path at the map
-        showPath(ployList, latFromT, lonFromT, latToT, lonToT)
+        showPath(ployList, latFromT, longFromT, latToT, longToT)

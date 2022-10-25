@@ -29,23 +29,22 @@ def show_sidebar():
     # team member
     st.markdown(f"""<div style="text-align: left">
                         <h3 style='text-align: center;'>Team 6 members</h3>
-                        <a href='https://www.linkedin.com/in/xiangyu-an-34109a196/'><span style="text-transform:uppercase;">AN</span> Xiangyu</a>
-                        <a href='https://www.linkedin.com/in/m%C3%A9lisande-gr%C3%A9goire-b%C3%A9granger-a5654219b/'><span style="text-transform:uppercase;">Grégoire--Bégranger</span> Mélisande</a>
-                        <a href='https://www.linkedin.com/in/xiangyu-an-34109a196/'><span style="text-transform:uppercase;">Nadarajah</span> Sugitha</a>
+                        <p><a href='https://www.linkedin.com/in/xiangyu-an-34109a196/'><span style="text-transform:uppercase;">AN</span> Xiangyu</a></p>
+                        <p><a href='https://www.linkedin.com/in/m%C3%A9lisande-gr%C3%A9goire-b%C3%A9granger-a5654219b/'><span style="text-transform:uppercase;">Grégoire--Bégranger</span> Mélisande</a></p>
+                        <p><a href='https://www.linkedin.com/in/xiangyu-an-34109a196/'><span style="text-transform:uppercase;">Nadarajah</span> Sugitha</a></p>
                     </div>""", unsafe_allow_html=True)
     # github
     st.markdown(
-        f"""<
-            <div style="text-align: center">
+        f"""<div style="text-align: center">
                 <h3 style='text-align: center;'>Our Github</h3>
                 <a href='https://github.com/AN-Xiang-yu/Beijing_traffic_analysis_ver2'>{t.img_to_html('img/github.png')}</a>
             </div>""", unsafe_allow_html=True)
-    # image of EFREI Paris
-    st.image("img\logo-efrei.png")
+
     # selection of page
     selection = st.radio("Browsing", list(
         PAGES.keys()))  # navigation to the other page
-
+    # image of EFREI Paris
+    st.image("img\logo-efrei.png")
     return selection
 
 
