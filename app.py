@@ -44,7 +44,7 @@ def show_sidebar():
     selection = st.radio("Browsing", list(
         PAGES.keys()))  # navigation to the other page
     # image of EFREI Paris
-    st.image("img\logo-efrei.png")
+    st.image("img\efrei.png")
     return selection
 
 
