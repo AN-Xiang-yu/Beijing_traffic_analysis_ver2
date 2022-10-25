@@ -1,7 +1,7 @@
 <h1>Beijing_traffic_analysis</h1> 
 
 Here is the link to run our project
-https://melisandegb-beijing-traffic-analysis-app-mh00os.streamlitapp.com/
+https://an-xiang-yu-beijing-traffic-analysis-ver2-app-ulo4b0.streamlitapp.com/
 
 <article> 
   <section>
