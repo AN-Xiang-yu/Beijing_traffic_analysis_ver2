@@ -1,10 +1,12 @@
 # congestion.py
 
+import statistics
 import streamlit as st
 import pandas as pd
 import csv
 import math
 import folium
+from folium.plugins import HeatMap
 from heapq import *
 from streamlit_folium import folium_static
 from streamlit_folium import st_folium
@@ -40,7 +42,7 @@ def getFileLoc(weekday, hour):
         hour (int): the hour entered
 
     Returns:
-        str: the location of the file to be used
+        str, str: the location of the file to be used
     """
     if weekday < 6:
         hourStart = str(hour)
@@ -49,7 +51,8 @@ def getFileLoc(weekday, hour):
         hourEnd = str(hour+1)
         if len(hourEnd) == 1:
             hourEnd = '0'+hourEnd
-        mapFile = 'weekday/0408' + hourStart + hourEnd + '_map.csv'
+        mapFile = 'csv/map/weekday/0408' + hourStart + hourEnd + '_map.csv'
+        segmentFile = 'csv/segment/'+'weekday/0408' + hourStart + hourEnd + '.csv'
     else:
         hourStart = str(int(hour/2)*2)
         if len(hourStart) == 1:
@@ -57,10 +60,10 @@ def getFileLoc(weekday, hour):
         hourEnd = str(int(hour/2)*2+2)
         if len(hourEnd) == 1:
             hourEnd = '0'+hourEnd
-        mapFile = 'weekend/0203' + hourStart + hourEnd + '_map.csv'
+        mapFile = 'csv/map/weekend/0203' + hourStart + hourEnd + '_map.csv'
+        segmentFile = 'csv/segment/'+'weekend/0203' + hourStart + hourEnd + '.csv'
 
-    file = 'csv/map/'+mapFile
-    return file
+    return mapFile, segmentFile
 
 
 def congestion_color(number_car):
@@ -80,47 +83,87 @@ def congestion_color(number_car):
         return 'red'
 
 
+def show_congestion_route_map(data_map):
+    """show the congestion map
+
+    Args:
+        data_map (pd.DataFrame): the map data
+    """
+    "show the load profress"
+    bar = st.progress(0)
+    mmap = folium.Map(location=[39.9632245, 116.280983], zoom_start=11,
+                      tiles='http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
+                      attr='default', key='result')
+
+    index = -1
+    for i in data_map.iterrows():
+        index = index + 1
+        # get the geometry point
+        geometry = i[1]['Geometry'].split(";")
+        number_car = int(i[1]['NumberPoints'])
+        # get the start and end point
+        point_start = geometry[0].split(':')
+        point_end = geometry[len(geometry)-1].split(':')
+        # get the line to print
+        line = [[float(point_start[1]), float(point_start[0])]] + \
+            [[float(point_end[1]), float(point_end[0])]]
+        # add the line to the map
+        folium.PolyLine(line, color=congestion_color(
+            number_car)).add_to(mmap)
+        bar.progress(index/(len(data_map)-1))
+
+    folium_static(mmap)
+
+
+def show_congestion_heat_map(data_segment):
+    """show the heat map of the congestion
+
+    Args:
+        data_segment (pd.DataFrame): the segement data
+    """
+    # extracting longitude and latitude values to separate lists
+    longs = data_segment['long'].tolist()
+    lats = data_segment['lat'].tolist()
+    # calculating mean longitude and latitude values
+    meanLong = statistics.mean(longs)
+    meanLat = statistics.mean(lats)
+    # create base map object using Map()
+    mapObj = folium.Map(location=[meanLat, meanLong], zoom_start=14.5)
+    # create heatmap layer
+    heatmap = HeatMap(list(zip(lats, longs)),
+                      min_opacity=0.2,
+
+                      radius=50, blur=50,
+                      max_zoom=1)
+    # add heatmap layer to base map
+    heatmap.add_to(mapObj)
+    folium_static(mapObj)
+
+
 def main():
     """the main part of the page
     """
     # create the container blocks
     input_congestion = st.container()
     dataset = st.container()
+    congestion_route_map = st.container()
+    congestion_heat_map = st.container()
 
     with input_congestion:
         # input of the datetime
         week, hour = datetimeInput()
         # get the path of the map file
-        file = getFileLoc(week, hour)
-        bar = st.progress(0)
+        file_map, file_segment = getFileLoc(week, hour)
 
     with dataset:
-        data = pd.read_csv(file)
-        # fig = px.density_mapbox(data, lat='lat', lon='long', z='n_points', radius=10,
-        #                         center=dict(lat=39.9632245, lon=116.280983), zoom=10,
-        #                         mapbox_style="stamen-terrain")
-        # fig = px.line_mapbox(data, lat="lat", lon="long",
-        #                      color="n_points", zoom=3, height=300)
+        data_map = pd.read_csv(file_map)
+        data_segment = pd.read_csv(
+            file_segment, names=['taxi_id', 'time', 'long', 'lat'])
 
-        # fig.update_layout(mapbox_style="stamen-terrain", mapbox_zoom=4, mapbox_center_lat=41,
-        #                   margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        # st.plotly_chart(fig, use_container_width=True)
-        mmap = folium.Map(location=[39.9632245, 116.280983], zoom_start=11,
-                          tiles='http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
-                          attr='default', key='result')
-        index = -1
-        for i in data.iterrows():
-            index = index + 1
+    with congestion_route_map:
+        st.title('Route map')
+        show_congestion_route_map(data_map)
 
-            geometry = i[1]['Geometry'].split(";")
-            number_car = int(i[1]['NumberPoints'])
-
-            point_start = geometry[0].split(':')
-            point_end = geometry[len(geometry)-1].split(':')
-            line = [[float(point_start[1]), float(point_start[0])]] + \
-                [[float(point_end[1]), float(point_end[0])]]
-            folium.PolyLine(line, color=congestion_color(
-                number_car)).add_to(mmap)
-            bar.progress(index/(len(data)-1))
-
-        folium_static(mmap)
+    with congestion_heat_map:
+        st.title('Heat map')
+        show_congestion_heat_map(data_segment)
