@@ -160,10 +160,12 @@ def main():
         data_segment = pd.read_csv(
             file_segment, names=['taxi_id', 'time', 'long', 'lat'])
 
+    # show the congestion map
     with congestion_route_map:
         st.title('Route map')
         show_congestion_route_map(data_map)
 
+    # show the heat map of the congestion
     with congestion_heat_map:
         st.title('Heat map')
         show_congestion_heat_map(data_segment)
