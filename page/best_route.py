@@ -461,7 +461,7 @@ def showPath(ployList, latFromT, longFromT, latToT, longToT):
     # show trip details
     price_taxi = calcul_price_taxi(distance_taxi)
     st.write('For this trip you can expect to pay '+str(price_taxi) +
-             " ¥ and it will take you", average_time_taxi_start_walk+average_time_taxi+average_time_taxi_end_walk, "min")
+             " ¥ and it will take you", round(average_time_taxi_start_walk+average_time_taxi+average_time_taxi_end_walk, 2), "min")
     st.write('For this trip, you will need to walk for ' + str(distance_start_walk) +
              ' km for ' + str(average_time_taxi_start_walk)+' min')
     st.write('And then, you will need to take the taxi for ' + str(distance_taxi) +
