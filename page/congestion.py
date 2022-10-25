@@ -75,9 +75,9 @@ def congestion_color(number_car):
     Returns:
         str: color of the line on the map
     """
-    if number_car < 10:
+    if number_car < 5:
         return 'lightgreen'
-    elif number_car < 20:
+    elif number_car < 10:
         return 'yellow'
     else:
         return 'red'
