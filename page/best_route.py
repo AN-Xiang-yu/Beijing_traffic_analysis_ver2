@@ -191,7 +191,7 @@ def startEndPointInput(fileLoc):
         reset_start_end_point()
     # initialise the map
     m = folium.Map(location=[39.9632245, 116.280983], zoom_start=11,
-                   tiles='http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
+                   tiles='http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunityENG/MapServer/tile/{z}/{y}/{x}',
                    attr='default')
     # show the longitude and latitude of each clikc
     m.add_child(folium.LatLngPopup())
