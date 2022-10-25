@@ -8,7 +8,7 @@ import streamlit as st
 PAGES = {
     'Most congested streets': congestion,
     'Best route to go from point A to B': best_route,
-    'Average car density of Beijing': density,
+    'Average car density': density,
 }
 
 # create the containers
