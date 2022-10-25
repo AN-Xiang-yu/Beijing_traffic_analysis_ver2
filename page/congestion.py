@@ -111,7 +111,7 @@ def show_congestion_route_map(data_map):
         folium.PolyLine(line, color=congestion_color(
             number_car)).add_to(mmap)
         bar.progress(index/(len(data_map)-1))
-
+    # show the map
     folium_static(mmap)
 
 
@@ -137,6 +137,7 @@ def show_congestion_heat_map(data_segment):
                       max_zoom=1)
     # add heatmap layer to base map
     heatmap.add_to(mapObj)
+    # show the map
     folium_static(mapObj)
 
 
@@ -149,12 +150,13 @@ def main():
     congestion_route_map = st.container()
     congestion_heat_map = st.container()
 
+    # input of the datetime
     with input_congestion:
-        # input of the datetime
         week, hour = datetimeInput()
         # get the path of the map file
         file_map, file_segment = getFileLoc(week, hour)
 
+    # charge the dataset
     with dataset:
         data_map = pd.read_csv(file_map)
         data_segment = pd.read_csv(
